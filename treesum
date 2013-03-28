@@ -1,0 +1,62 @@
+#!/bin/bash
+
+function usage() {
+  cat << EOF
+usage: treesum <directory>
+
+Calculate a directory tree's checksum 
+
+Looks at files, directories, and symlinks.
+EOF
+}
+
+XARGS_PARALLELISM=15
+ARGS_PER_WORKER=1000
+XARGS="xargs -0 -P $XARGS_PARALLELISM -n $ARGS_PER_WORKER"
+
+function calculate_file_checksum() {
+  find -type f -print0 |\
+      $XARGS -I {} sha1sum {} |\
+      sort | sha1sum | awk '{print $1}'
+}
+
+function calculate_link_checksum() {
+  # What constitutes a symlink's checksum is somewhat open to interpretation.
+  # Here, we look at the mode, group name, user name, file name, SELinux context,
+  # and target filename of the symlink.
+  find -type l -print0 |\
+      $XARGS -I {} stat -c "%a\0%G\0%n\0%U\0%C\0%N" {} |\
+      sort | sha1sum | awk '{print $1}' 
+}
+
+function calculate_dir_checksum() {
+  # What constitutes a directory's checksum is somewhat open to interpretation
+  # Here, we look at the mode, group name, user name, file name, and SELinux context
+  find -type d -print0 |\
+      $XARGS -I {} stat -c "%a\0%G\0%n\0%U\0%C" {} |\
+      sort | sha1sum | awk '{print $1}'
+}
+
+function run_checksum() {
+  filesum=$(calculate_file_checksum)
+  linksum=$(calculate_link_checksum)
+  dirsum=$(calculate_dir_checksum)
+  echo $filesum $dirsum $linksum | sha1sum | awk '{print $1}'
+}
+
+function main() {
+  DIRECTORY=$1
+  
+  [ -z $DIRECTORY ] && usage && exit 1
+
+  [ ! -d $DIRECTORY ] && echo "treesum: $DIRECTORY: No such directory" && exit 2
+
+  # normalize directory path
+  DIRECTORY=$(readlink -f $DIRECTORY)
+
+  cd $DIRECTORY
+
+  echo $(run_checksum $DIRECTORY)
+}
+
+main $1
