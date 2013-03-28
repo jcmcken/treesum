@@ -12,6 +12,7 @@ BuildRequires:  coreutils
 Requires:       bash
 Requires:       findutils
 Requires:       coreutils
+BuildArch:      noarch
 
 %description
 A command-line utility for calculating the checksum of a directory and its
