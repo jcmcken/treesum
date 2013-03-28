@@ -1,6 +1,6 @@
 ROOTDIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 
-.PHONY: build install source test
+.PHONY: build install source test rpm
 
 build:
 	@echo "Nothing to build!"
@@ -13,3 +13,6 @@ source:
 
 test:
 	$(ROOTDIR)/scripts/run_tests.sh
+
+rpm:
+	$(ROOTDIR)/scripts/make_rpm.sh
