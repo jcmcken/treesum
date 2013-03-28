@@ -18,7 +18,7 @@ A command-line utility for calculating the checksum of a directory and its
 contents.
 
 %prep
-%setup -q
+%setup -q -c
 
 %install
 [ -d $RPM_BUILD_ROOT ] && rm -rf $RPM_BUILD_ROOT
