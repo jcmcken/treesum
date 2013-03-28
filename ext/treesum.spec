@@ -4,7 +4,7 @@ Release:        1%{?dist}
 Group:          Utilities
 Summary:        A command-line utility for calculating the checksum of a directory and its contents
 
-License:        MIT 
+License:        BSD  
 Source0:        %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  make >= 3.81
