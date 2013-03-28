@@ -56,7 +56,8 @@ function main() {
 
   cd $DIRECTORY
 
-  echo $(run_checksum $DIRECTORY)
+  echo $(run_checksum)
+
 }
 
 main $1
