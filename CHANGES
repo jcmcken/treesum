@@ -1,3 +1,20 @@
+Version 0.2.0
+-------------
+
+* The symlink and directory metadata generators now use the UID and GID rather
+  than the user and group names.
+* The parallelism of the metadata generation procedures are now overridable via
+  the ``TREESUM_WORKERS`` and ``TREESUM_PER_WORKER`` environment variables, which
+  configure the number of processes to launch and the number of files to feed to
+  each process (respectively).
+* Regular file stats are now included in the ``treesum`` computation, so that files
+  now must have both the exact contents and stats for a directory to return a
+  consistent checksum.
+* The parallelism of metadata generation was reduced to avoid corruption issues
+  under circumstances where file paths are large.
+* The ``treesum`` RPM spec file now includes various documents including the license
+  and README.
+
 Version 0.1.0
 -------------
 

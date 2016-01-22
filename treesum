@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o pipefail
+
 function usage() {
   cat << EOF
 usage: treesum <directory>
@@ -10,9 +12,11 @@ Looks at files, directories, and symlinks.
 EOF
 }
 
-XARGS_PARALLELISM=15
-ARGS_PER_WORKER=1000
-XARGS="xargs -0 -P $XARGS_PARALLELISM -n $ARGS_PER_WORKER"
+XARGS_WORKERS=${TREESUM_WORKERS:-10}
+
+XARGS_PER_WORKER=${TREESUM_PER_WORKER:-3}
+
+XARGS="xargs -0 -P $XARGS_WORKERS -n $XARGS_PER_WORKER -r -x"
 
 function calculate_file_checksum() {
   find -type f -print0 |\
@@ -25,15 +29,16 @@ function calculate_link_checksum() {
   # Here, we look at the mode, group name, user name, file name, SELinux context,
   # and target filename of the symlink.
   find -type l -print0 |\
-      $XARGS -I {} stat -c "%a\0%G\0%n\0%U\0%C\0%N" {} |\
+      $XARGS stat --printf "%a\0%g\0%n\0%u\0%C\0%N\n" |\
       sort | sha1sum | awk '{print $1}' 
 }
 
 function calculate_dir_checksum() {
   # What constitutes a directory's checksum is somewhat open to interpretation
   # Here, we look at the mode, group name, user name, file name, and SELinux context
-  find -type d -print0 |\
-      $XARGS -I {} stat -c "%a\0%G\0%n\0%U\0%C" {} |\
+  # of all files and subdirectories
+  find -type d -o -type f -print0 |\
+      $XARGS stat --printf "%a\0%g\0%n\0%u\0%C\n" |\
       sort | sha1sum | awk '{print $1}'
 }
 

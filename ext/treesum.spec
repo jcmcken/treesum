@@ -1,5 +1,5 @@
 Name:           treesum
-Version:        0.1.0
+Version:        0.2.0
 Release:        1%{?dist}
 Group:          Utilities
 Summary:        A command-line utility for calculating the checksum of a directory and its contents
@@ -34,7 +34,13 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0644,root,root,0755)
 %attr(0755,root,root) %{_bindir}/treesum
 %{_datadir}/treesum/*
+%doc README.rst
+%doc LICENSE
+%doc VERSION
+%doc CHANGES
 
 %changelog
+* Fri Jan 22 2016 - Jon McKenzie - 0.2.0
+- Bump to 0.2.0
 * Wed Mar 27 2013 - Jon McKenzie - 0.1.0
 - Initial implementation

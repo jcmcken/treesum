@@ -12,7 +12,7 @@ source:
 	$(ROOTDIR)/scripts/make_source.sh
 
 test:
-	$(ROOTDIR)/scripts/run_tests.sh
+	bash `which roundup` ./scripts/tests.sh
 
 rpm:
 	$(ROOTDIR)/scripts/make_rpm.sh

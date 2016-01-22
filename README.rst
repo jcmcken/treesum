@@ -24,3 +24,19 @@ undefined operation, ``treesum`` takes the following approach:
   these changes, the resulting checksum changes.
 * For symlinks, the utility checks the same metadata as directories. In 
   addition, it validates the dereferenced target of the link.
+
+# Configuration
+
+Several environment variables are available to allow you to tweak the
+operation of ``treesum``:
+
+* ``TREESUM_WORKERS``: The number of worker processes to launch when gathering
+  file statistics (e.g. calls to ``stat``, ``sha1sum``). Defaults to ``10``.
+* ``TREESUM_PER_WORKER``: The number of arguments to pass to each worker process.
+  Defaults to ``3``. You should be careful setting this too high. Systems have a
+  default bytesize limit to the size of a command-line argument (typically ``128KiB``
+  or ``131072`` bytes). If you exceed this limit, the arguments will get truncated,
+  which will cause the resulting checksum to be garbage (and every time you run it,
+  you'll likely get a different value). If you're paranoid, set this to ``1`` (although
+  even this doesn't guarantee you won't get a garbage checksum, but it should protect
+  you in most cases).
