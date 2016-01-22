@@ -1,6 +1,6 @@
 Name:           treesum
 Version:        0.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Group:          Utilities
 Summary:        A command-line utility for calculating the checksum of a directory and its contents
 
@@ -19,7 +19,7 @@ A command-line utility for calculating the checksum of a directory and its
 contents.
 
 %prep
-%setup -q -c
+%setup -q
 
 %install
 [ -d $RPM_BUILD_ROOT ] && rm -rf $RPM_BUILD_ROOT
