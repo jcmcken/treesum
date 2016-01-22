@@ -25,7 +25,8 @@ undefined operation, ``treesum`` takes the following approach:
 * For symlinks, the utility checks the same metadata as directories. In 
   addition, it validates the dereferenced target of the link.
 
-# Configuration
+Configuration
+-------------
 
 Several environment variables are available to allow you to tweak the
 operation of ``treesum``:
